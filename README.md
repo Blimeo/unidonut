@@ -1,7 +1,7 @@
 # Unidonut
 ### A platform to meet other university students
 
-### Technologies
+#### Technologies
 React/TypeScript/Go backend/MongoDB
 
 #### Setup
