@@ -1,39 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import "antd/dist/antd.css";
 import Home from "./Home";
-import Header from "./Header";
-import { createMuiTheme, CssBaseline, ThemeProvider } from '@material-ui/core';
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 
+import HeaderComponent from "./HeaderComponent";
+// import { createMuiTheme, CssBaseline, ThemeProvider } from '@material-ui/core';
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { Layout } from "antd";
+
+const { Footer } = Layout;
 
 function App() {
-  const theme = createMuiTheme({
-    typography: {
-      fontFamily: [
-        "-apple-system",
-        "BlinkMacSystemFont",
-        '"Work Sans"',
-        '"Helvetica Neue"',
-      ].join(","),
-    },
-  });
   return (
     <div>
       <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Header />
-          <main>
-            <Switch>
-              <Route path="/" component={Home} exact />
-              <Route path="/meet">
-                {/* <Meet loggedIn={loggedIn} /> */}
-              </Route>
-            </Switch>
-          </main>
-          {/* <Footer /> */}
-        </ThemeProvider>
+        <Layout className="layout">
+          <HeaderComponent />
+          <Switch>
+            <Route path="/" component={Home} exact />
+            <Route path="/about">{/* <About loggedIn={loggedIn} /> */}</Route>
+            <Route path="/connect" component={Home} exact />
+          </Switch>
+          <Footer style={{ textAlign: "center" }}>Unidonut ©2021</Footer>
+        </Layout>
       </BrowserRouter>
     </div>
   );
