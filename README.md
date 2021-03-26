@@ -2,7 +2,7 @@
 ### A platform to meet other university students
 
 #### Technologies
-React/TypeScript/Go backend/MongoDB
+React/Ant Design UI/TypeScript/Go backend/MongoDB
 
 #### Setup
 `yarn install` to install dependencies (first-time) 
