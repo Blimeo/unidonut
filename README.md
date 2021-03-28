@@ -2,10 +2,10 @@
 ### A platform to meet other university students
 
 #### Technologies
-Frontend: React + Typescript
-UI Library: Ant Design UI
-Backend: Go backend
-Database: MongoDB
+- Frontend: React + Typescript
+- UI Library: Ant Design UI
+- Backend: Go backend
+- Database: MongoDB
 
 #### Setup
 Install Node.js and then install yarn with `npm install --global yarn` if you haven't already.
