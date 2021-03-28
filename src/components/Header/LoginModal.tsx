@@ -56,10 +56,10 @@ export default function LoginModal({
         type="email"
       />
       <b>Password</b>
-      <Input
+      <Input.Password
         onChange={(e) => setPassword(e.target.value)}
         value={password}
-        type="password"
+        // type="password"
       />
     </Modal>
   );
