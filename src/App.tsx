@@ -1,22 +1,21 @@
-import React from "react";
-import logo from "./logo.svg";
+import React, { useState } from "react";
 import "./App.css";
 import "antd/dist/antd.css";
 import Home from "./Home";
 
-import HeaderComponent from "./HeaderComponent";
-// import { createMuiTheme, CssBaseline, ThemeProvider } from '@material-ui/core';
+import HeaderComponent from "./components/Header/HeaderComponent";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import { Layout } from "antd";
 
 const { Footer } = Layout;
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
   return (
     <div>
       <BrowserRouter>
         <Layout className="layout">
-          <HeaderComponent />
+          <HeaderComponent loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
           <Switch>
             <Route path="/" component={Home} exact />
             <Route path="/about">{/* <About loggedIn={loggedIn} /> */}</Route>
