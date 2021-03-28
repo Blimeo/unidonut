@@ -8,11 +8,9 @@
 - Database: MongoDB
 
 #### Setup
-Install Node.js and then install yarn with `npm install --global yarn` if you haven't already.
-
-`yarn install` to install project dependencies (first-time)
-
-Recommended: Use VS Code for development, it integrates perfectly.
+- Install Node.js and then install yarn with `npm install --global yarn` if you haven't already.
+- `yarn install` to install project dependencies (first-time)
+- Recommended: Use VS Code for development, it integrates perfectly.
 
 #### Running the dev server
 `yarn start` in root directory to run dev, eventually this will become a monorepo for frontend and backend
