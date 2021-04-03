@@ -14,9 +14,9 @@
 - Recommended: Use VS Code for development, it integrates perfectly.
 
 #### Running the dev server
-`yarn start` in root directory to run dev, eventually this will become a monorepo for frontend and backend
-`go build` in `/backend` and then `./unidonut` for it to start listening on :8000.
-TODO: automatic environment variable configuration
+- `yarn start` in root directory to run dev, eventually this will become a monorepo for frontend and backend
+- `go build` in `/backend` and then `./unidonut` for it to start listening on :8000.
+- TODO: automatic environment variable configuration
 
 #### Roadmap:
 - Create login system + user profile interface
