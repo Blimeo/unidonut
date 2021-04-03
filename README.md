@@ -10,10 +10,13 @@
 #### Setup
 - Install Node.js and then install yarn with `npm install --global yarn` if you haven't already.
 - `yarn install` to install project dependencies (first-time)
+- Install Golang if you haven't already for backend
 - Recommended: Use VS Code for development, it integrates perfectly.
 
 #### Running the dev server
 `yarn start` in root directory to run dev, eventually this will become a monorepo for frontend and backend
+`go build` in `/backend` and then `./unidonut` for it to start listening on :8000.
+TODO: automatic environment variable configuration
 
 #### Roadmap:
 - Create login system + user profile interface
