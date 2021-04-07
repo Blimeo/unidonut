@@ -28,6 +28,7 @@ export default function LoginModal({
   const [password, setPassword] = useState("");
   const handleLogin = () => {
     setLoginVisible(false); //temporary, this will become login logic
+    setLoggedIn(true);
   };
   const handleClose = () => {
     setLoginVisible(false);

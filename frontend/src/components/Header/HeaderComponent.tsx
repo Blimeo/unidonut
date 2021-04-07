@@ -44,7 +44,7 @@ export default function HeaderComponent({ loggedIn, setLoggedIn }: Props) {
           <Link to={"/connect"}>Connect</Link>
         </Menu.Item>
 
-        {!loggedIn && (
+        {!loggedIn ? (
           <>
             <Button
               type="primary"
@@ -53,8 +53,20 @@ export default function HeaderComponent({ loggedIn, setLoggedIn }: Props) {
             >
               Login
             </Button>
-            <LoginModal setLoggedIn={setLoggedIn} loginVisible={loginVisible} setLoginVisible={setLoginVisible}/>
+            <LoginModal
+              setLoggedIn={setLoggedIn}
+              loginVisible={loginVisible}
+              setLoginVisible={setLoginVisible}
+            />
           </>
+        ) : (
+          <Button
+            type="primary"
+            style={{ marginLeft: "5px" }}
+            onClick={() => setLoggedIn(false)}
+          >
+            Logout
+          </Button>
         )}
       </Menu>
     </Header>

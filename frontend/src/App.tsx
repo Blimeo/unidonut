@@ -17,7 +17,9 @@ function App() {
         <Layout className="layout">
           <HeaderComponent loggedIn={loggedIn} setLoggedIn={setLoggedIn}/>
           <Switch>
-            <Route path="/" component={Home} exact />
+            <Route path="/" exact >
+              <Home loggedIn={loggedIn} />
+              </Route>
             <Route path="/about">{/* <About loggedIn={loggedIn} /> */}</Route>
             <Route path="/connect" component={Home} exact />
           </Switch>
