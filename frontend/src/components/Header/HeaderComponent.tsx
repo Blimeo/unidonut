@@ -12,6 +12,7 @@ import {
 } from "antd";
 import { Link } from "react-router-dom";
 import LoginModal from "./LoginModal";
+import RegisterModal from "./RegisterModal";
 const { Header } = Layout;
 const { Title } = Typography;
 
@@ -22,7 +23,7 @@ type Props = {
 
 export default function HeaderComponent({ loggedIn, setLoggedIn }: Props) {
   const [loginVisible, setLoginVisible] = useState(false);
-
+  const [registerVisible, setRegisterVisible] = useState(false);
   
   return (
     <Header>
@@ -44,30 +45,44 @@ export default function HeaderComponent({ loggedIn, setLoggedIn }: Props) {
           <Link to={"/connect"}>Connect</Link>
         </Menu.Item>
 
-        {!loggedIn ? (
-          <>
+        <div style={{ float: "right" }}>
+          {!loggedIn ? (
+            <>
+              <Button
+                type="primary"
+                style={{ marginLeft: "5px" }}
+                onClick={() => setLoginVisible(true)}
+              >
+                Login
+              </Button>
+              <LoginModal
+                setLoggedIn={setLoggedIn}
+                loginVisible={loginVisible}
+                setLoginVisible={setLoginVisible}
+              />
+              <Button
+                type="primary"
+                style={{ marginLeft: "5px" }}
+                onClick={() => setRegisterVisible(true)}
+              >
+                Register
+              </Button>
+              <RegisterModal
+                setLoggedIn={setLoggedIn}
+                registerVisible={registerVisible}
+                setRegisterVisible={setRegisterVisible}
+              />
+            </>
+          ) : (
             <Button
               type="primary"
               style={{ marginLeft: "5px" }}
-              onClick={() => setLoginVisible(true)}
+              onClick={() => setLoggedIn(false)}
             >
-              Login
+              Logout
             </Button>
-            <LoginModal
-              setLoggedIn={setLoggedIn}
-              loginVisible={loginVisible}
-              setLoginVisible={setLoginVisible}
-            />
-          </>
-        ) : (
-          <Button
-            type="primary"
-            style={{ marginLeft: "5px" }}
-            onClick={() => setLoggedIn(false)}
-          >
-            Logout
-          </Button>
-        )}
+          )}
+        </div>
       </Menu>
     </Header>
   );

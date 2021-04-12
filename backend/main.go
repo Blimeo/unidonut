@@ -40,7 +40,7 @@ func handleLogin(c *gin.Context) {
 
 func main() {
 	r := gin.Default()
-	r.POST("/signup/", handleSignup)
-	r.POST("/login/", handleLogin)
-	r.Run(":8000")
+	r.POST("/register", handleSignup)
+	r.POST("/login", handleLogin)
+	r.Run(":5000")
 }
