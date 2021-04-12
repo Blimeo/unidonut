@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -40,7 +41,9 @@ func handleLogin(c *gin.Context) {
 
 func main() {
 	r := gin.Default()
+	r.Use(cors.Default())
 	r.POST("/register", handleSignup)
 	r.POST("/login", handleLogin)
+
 	r.Run(":5000")
 }
