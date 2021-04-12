@@ -17,16 +17,16 @@ import (
 const (
 	// Timeout operations after N seconds
 	connectTimeout           = 5
-	connectionStringTemplate = "mongodb://%s:%s@%s"
+	connectionStringTemplate = "mongodb+srv://%s:%s@%s"
 )
 
 // GetConnection Retrieves a client to the MongoDB
 func getConnection() (*mongo.Client, context.Context, context.CancelFunc) {
 	username := os.Getenv("MONGODB_USERNAME")
-	password := os.Getenv("MONGODB_PASSWORD")
+	Password := os.Getenv("MONGODB_PASSWORD")
 	clusterEndpoint := os.Getenv("MONGODB_ENDPOINT")
 
-	connectionURI := fmt.Sprintf(connectionStringTemplate, username, password, clusterEndpoint)
+	connectionURI := fmt.Sprintf(connectionStringTemplate, username, Password, clusterEndpoint)
 
 	client, err := mongo.NewClient(options.Client().ApplyURI(connectionURI))
 	if err != nil {
@@ -50,8 +50,9 @@ func getConnection() (*mongo.Client, context.Context, context.CancelFunc) {
 	return client, ctx, cancel
 }
 
-func createUser(u *User) (*string, error) {
-	if u.email == "" || u.pwd == "" || u.username == "" {
+func createUser(u *UserAuth) (*string, error) {
+	if u.Email == "" || u.Password == "" {
+		log.Printf("Oh No %v %v", u.Email, u.Password)
 		return nil, errors.New("Blank input")
 	}
 	client, ctx, cancel := getConnection()
@@ -68,8 +69,8 @@ func createUser(u *User) (*string, error) {
 	return &token, nil
 }
 
-func login(u *UserLogin) (*string, error) {
-	if u.email == "" || u.pwd == "" {
+func login(u *UserAuth) (*string, error) {
+	if u.Email == "" || u.Password == "" {
 		return nil, errors.New("Blank input")
 	}
 	client, ctx, cancel := getConnection()
@@ -77,7 +78,7 @@ func login(u *UserLogin) (*string, error) {
 	defer client.Disconnect(ctx)
 	user_collection := client.Database("unidonut").Collection("users")
 	var result bson.M
-	err := user_collection.FindOne(ctx, bson.D{{"email", u.email}, {"pwd", u.pwd}}).Decode(&result)
+	err := user_collection.FindOne(ctx, bson.D{{"Email", u.Email}, {"Password", u.Password}}).Decode(&result)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return nil, errors.New("No such user exists")

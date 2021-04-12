@@ -38,15 +38,11 @@ export default function RegisterModal({
   const handleRegister = async (values: any) => {
       console.log("Success:", values);
 
-    const opts = {
-      email: email,
-      password: password,
-    };
     const response = await fetch(
       `/register`,
       {
         method: "POST",
-        body: JSON.stringify(opts),
+        body: JSON.stringify(values),
       }
     );
     if (response.ok) {
@@ -86,9 +82,9 @@ export default function RegisterModal({
         onFinishFailed={onFinishFailed}
       >
         <Form.Item
-          label="Username"
-          name="username"
-          rules={[{ required: true, message: "Please input your username!" }]}
+          label="Email"
+          name="email"
+          rules={[{ required: true, message: "Please input your email!" }]}
         >
           <Input />
         </Form.Item>

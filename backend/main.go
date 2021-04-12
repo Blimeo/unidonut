@@ -9,12 +9,13 @@ import (
 )
 
 func handleSignup(c *gin.Context) {
-	var u User
+	var u UserAuth
 	if err := c.ShouldBindJSON(&u); err != nil {
 		log.Print(err)
 		c.JSON(http.StatusBadRequest, gin.H{"msg": err})
 		return
 	}
+	log.Println(u)
 	authToken, err := createUser(&u)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"msg": err})
@@ -24,7 +25,7 @@ func handleSignup(c *gin.Context) {
 }
 
 func handleLogin(c *gin.Context) {
-	var u UserLogin
+	var u UserAuth
 	if err := c.ShouldBindJSON(&u); err != nil {
 		log.Print(err)
 		c.JSON(http.StatusBadRequest, gin.H{"msg": err})
