@@ -19,7 +19,7 @@ export default function Home({ loggedIn }: Props) {
             <Col span={12} style={{height: "100%"}}>
               <div className="site-layout-content" style={{ margin: "16px 0", padding: "24px" }}>
                 {loggedIn ? (
-                  <Title level={2}>Welcome back, Matthew!</Title>
+                  <Title level={2}>Welcome back!</Title>
                 ) : (
                   <Title level={2}>Welcome to Unidonut!</Title>
                 )}

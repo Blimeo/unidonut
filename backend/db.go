@@ -50,9 +50,8 @@ func getConnection() (*mongo.Client, context.Context, context.CancelFunc) {
 	return client, ctx, cancel
 }
 
-func createUser(u *UserAuth) (*string, error) {
-	if u.Email == "" || u.Password == "" {
-		log.Printf("Oh No %v %v", u.Email, u.Password)
+func createUser(u *Register) (*string, error) {
+	if u.Email == "" || u.Password == "" || u.FirstName == "" || u.LastName == "" {
 		return nil, errors.New("Blank input")
 	}
 	client, ctx, cancel := getConnection()
@@ -69,7 +68,7 @@ func createUser(u *UserAuth) (*string, error) {
 	return &token, nil
 }
 
-func login(u *UserAuth) (*string, error) {
+func login(u *Login) (*User, error) {
 	if u.Email == "" || u.Password == "" {
 		return nil, errors.New("Blank input")
 	}
@@ -77,13 +76,12 @@ func login(u *UserAuth) (*string, error) {
 	defer cancel()
 	defer client.Disconnect(ctx)
 	user_collection := client.Database("unidonut").Collection("users")
-	var result bson.M
-	err := user_collection.FindOne(ctx, bson.D{{"Email", u.Email}, {"Password", u.Password}}).Decode(&result)
+	var result *User
+	err := user_collection.FindOne(ctx, bson.D{{"email", u.Email}, {"password", u.Password}}).Decode(&result)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return nil, errors.New("No such user exists")
 		}
 	}
-	token := "Valid user"
-	return &token, nil
+	return result, nil
 }

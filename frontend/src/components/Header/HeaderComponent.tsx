@@ -25,6 +25,11 @@ export default function HeaderComponent({ loggedIn, setLoggedIn }: Props) {
   const [loginVisible, setLoginVisible] = useState(false);
   const [registerVisible, setRegisterVisible] = useState(false);
   
+  const handleLogout =  () => {
+    setLoggedIn(false);
+    localStorage.removeItem("token");
+    localStorage.removeItem("token_exp");
+  }
   return (
     <Header>
       <div className={styles.headerLogoText}>
@@ -77,7 +82,7 @@ export default function HeaderComponent({ loggedIn, setLoggedIn }: Props) {
             <Button
               type="primary"
               style={{ marginLeft: "5px" }}
-              onClick={() => setLoggedIn(false)}
+              onClick={() => handleLogout()}
             >
               Logout
             </Button>

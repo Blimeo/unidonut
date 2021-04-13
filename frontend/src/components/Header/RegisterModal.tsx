@@ -33,8 +33,7 @@ export default function RegisterModal({
   registerVisible,
   setRegisterVisible,
 }: Props) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [registerError, setRegisterError] = useState(false);
   const handleRegister = async (values: any) => {
       console.log("Success:", values);
 
@@ -47,13 +46,15 @@ export default function RegisterModal({
     );
     if (response.ok) {
       setRegisterVisible(false);
+      setLoggedIn(true);
+    } else {
+      setRegisterError(true);
     }
-    setLoggedIn(true);
+    
   };
   const handleClose = () => {
     setRegisterVisible(false);
-    setEmail("");
-    setPassword("");
+    setRegisterError(false);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -65,14 +66,7 @@ export default function RegisterModal({
       visible={registerVisible}
       onOk={handleRegister}
       onCancel={handleClose}
-      footer={[
-        <Button key="back" onClick={handleClose}>
-          Close
-        </Button>,
-        <Button key="submit" type="primary" onClick={handleRegister}>
-          Register
-        </Button>,
-      ]}
+      footer={[]}
     >
       <Form
         {...layout}
@@ -81,6 +75,22 @@ export default function RegisterModal({
         onFinish={handleRegister}
         onFinishFailed={onFinishFailed}
       >
+        <Form.Item
+          label="First Name"
+          name="firstName"
+          rules={[{ required: true, message: "Please input your first name!" }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Last Name"
+          name="lastName"
+          rules={[{ required: true, message: "Please input your last name!" }]}
+        >
+          <Input />
+        </Form.Item>
+
         <Form.Item
           label="Email"
           name="email"
@@ -96,13 +106,17 @@ export default function RegisterModal({
         >
           <Input.Password />
         </Form.Item>
-
         <Form.Item {...tailLayout}>
           <Button type="primary" htmlType="submit">
             Submit
           </Button>
         </Form.Item>
       </Form>
+      {registerError && (
+        <Typography style={{ color: "red" }}>
+          There was an error signing you up :(
+        </Typography>
+      )}
     </Modal>
   );
 }
