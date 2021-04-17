@@ -85,3 +85,26 @@ func login(u *Login) (*User, error) {
 	}
 	return result, nil
 }
+
+func getUsers() ([]string, error) {
+	client, ctx, cancel := getConnection()
+	defer cancel()
+	defer client.Disconnect(ctx)
+	user_collection := client.Database("unidonut").Collection("users")
+	var result []string
+	cursor, err := user_collection.Find(ctx, bson.D{{}})
+	if err != nil {
+		return nil, errors.New("Find operation failed")
+	}
+	for cursor.Next(ctx) {
+		var elem bson.M
+		err := cursor.Decode(&elem)
+		if err != nil {
+			return nil, errors.New("Failed to decode element into bson.M")
+		}
+		bruh := elem["email"].(string)
+		result = append(result, bruh)
+	}
+	cursor.Close(ctx)
+	return result, nil
+}

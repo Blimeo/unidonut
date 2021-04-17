@@ -19,3 +19,8 @@ type User struct {
 	LastName  string `json:"lastName"`
 	Email     string `json:"email"`
 }
+
+type Pairing struct {
+	First  string `json:"first"`
+	Second string `json:"second"`
+}

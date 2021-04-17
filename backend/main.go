@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
+	"math/rand"
 	"net/http"
 	"time"
 
@@ -30,9 +32,7 @@ func handleLogin(c *gin.Context) (interface{}, error) {
 	if err := c.ShouldBind(&loginVals); err != nil {
 		return "", jwt.ErrMissingLoginValues
 	}
-	// userID := loginVals.Email
-	// password := loginVals.Password
-	// log.Println(userID, password)
+
 	user, err := login(&loginVals)
 	if err != nil {
 		return nil, jwt.ErrFailedAuthentication
@@ -52,6 +52,53 @@ func verify_token(c *gin.Context) {
 		"email":  user.(*User).Email,
 		"text":   "Hello World.",
 	})
+}
+
+func verify_admin(c *gin.Context) {
+	claims := jwt.ExtractClaims(c)
+	userID := claims[identityKey]
+	if userID == "my1@berkeley.edu" {
+		c.Status(http.StatusOK)
+	} else {
+		c.AbortWithStatus(http.StatusForbidden)
+	}
+}
+
+func generate_pairings(c *gin.Context) {
+	claims := jwt.ExtractClaims(c)
+	userID := claims[identityKey]
+	if userID == "my1@berkeley.edu" {
+		users, err := getUsers()
+		// log.Println(users)
+		if err != nil {
+			c.AbortWithStatus(http.StatusInternalServerError)
+		}
+
+		pairings := make([]Pairing, 0)
+		// shuffle users
+		rand.Seed(time.Now().UnixNano())
+		rand.Shuffle(len(users), func(i, j int) { users[i], users[j] = users[j], users[i] })
+		// remove admin account from shuffle
+		for i, other := range users {
+			if other == "my1@berkeley.edu" {
+				users = append(users[:i], users[i+1:]...)
+				break
+			}
+		}
+		//add "nobody" account if we have odd # of users
+		if len(users)%2 == 1 {
+			users = append(users, "Nobody")
+		}
+		// put pairings into map
+		for i := 0; i < len(users); i += 2 {
+			pairings = append(pairings, Pairing{users[i], users[i+1]})
+		}
+		jsonString, _ := json.Marshal(pairings)
+		log.Println(string(jsonString))
+		c.JSON(http.StatusOK, pairings)
+	} else {
+		c.AbortWithStatus(http.StatusForbidden)
+	}
 }
 
 func getUserInfo(c *gin.Context) {
@@ -130,6 +177,8 @@ func main() {
 	auth.Use(authMiddleware.MiddlewareFunc())
 	{
 		auth.GET("/verify_access_token", verify_token)
+		auth.GET("/verify_admin", verify_admin)
+		auth.GET("/generate_pairings", generate_pairings)
 		auth.GET("/get_user_info", getUserInfo)
 	}
 	r.Run(":5000")

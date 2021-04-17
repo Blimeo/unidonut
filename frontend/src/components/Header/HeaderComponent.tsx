@@ -19,12 +19,12 @@ const { Title } = Typography;
 type Props = {
   readonly loggedIn: boolean;
   readonly setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+  readonly isAdmin: boolean;
 };
 
-export default function HeaderComponent({ loggedIn, setLoggedIn }: Props) {
+export default function HeaderComponent({ loggedIn, setLoggedIn, isAdmin }: Props) {
   const [loginVisible, setLoginVisible] = useState(false);
   const [registerVisible, setRegisterVisible] = useState(false);
-  
   const handleLogout =  () => {
     setLoggedIn(false);
     localStorage.removeItem("token");
@@ -46,9 +46,16 @@ export default function HeaderComponent({ loggedIn, setLoggedIn }: Props) {
           <Link to={"/about"}>About</Link>
         </Menu.Item>
 
-        <Menu.Item key="3">
-          <Link to={"/connect"}>Connect</Link>
-        </Menu.Item>
+        {loggedIn &&
+          (isAdmin ? (
+            <Menu.Item key="3">
+              <Link to={"/admin"}>Pairings</Link>
+            </Menu.Item>
+          ) : (
+            <Menu.Item key="3">
+              <Link to={"/connect"}>My Pairing</Link>
+            </Menu.Item>
+          ))}
 
         <div style={{ float: "right" }}>
           {!loggedIn ? (
