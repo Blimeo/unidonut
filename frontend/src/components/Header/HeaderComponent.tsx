@@ -1,5 +1,7 @@
 import styles from "../../css/HeaderComponent.module.css";
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
+
 import {
   Layout,
   Menu,
@@ -25,8 +27,11 @@ type Props = {
 export default function HeaderComponent({ loggedIn, setLoggedIn, isAdmin }: Props) {
   const [loginVisible, setLoginVisible] = useState(false);
   const [registerVisible, setRegisterVisible] = useState(false);
+  const history = useHistory();
+
   const handleLogout =  () => {
     setLoggedIn(false);
+    history.push("/")
     localStorage.removeItem("token");
     localStorage.removeItem("token_exp");
   }

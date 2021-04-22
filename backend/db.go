@@ -108,3 +108,51 @@ func getUsers() ([]string, error) {
 	cursor.Close(ctx)
 	return result, nil
 }
+
+func getPartner(x string) (*Pairing, error) {
+	client, ctx, cancel := getConnection()
+	defer cancel()
+	defer client.Disconnect(ctx)
+	pairing_collection := client.Database("unidonut").Collection("pairings")
+	var partner Pairing
+	err := pairing_collection.FindOne(ctx, bson.D{{"first", x}}).Decode(&partner)
+	if err != nil {
+		return nil, errors.New("tjheoithaj")
+	}
+	return &partner, nil
+}
+
+func getPairings() ([]Pairing, error) {
+	client, ctx, cancel := getConnection()
+	defer cancel()
+	defer client.Disconnect(ctx)
+	pairing_collection := client.Database("unidonut").Collection("pairings")
+	var result []Pairing
+	cursor, err := pairing_collection.Find(ctx, bson.D{{}})
+	if err != nil {
+		panic(err)
+	}
+	if err = cursor.All(ctx, &result); err != nil {
+		return nil, errors.New("wutface")
+	}
+	return result, nil
+}
+
+func updatePairings(pairs []Pairing) error {
+	client, ctx, cancel := getConnection()
+	defer cancel()
+	defer client.Disconnect(ctx)
+	pairing_collection := client.Database("unidonut").Collection("pairings")
+	pairing_collection.DeleteMany(ctx, bson.D{})
+	v := make([]interface{}, len(pairs))
+	for i := range pairs {
+		v[i] = pairs[i]
+	}
+	// opts := options.Update()
+	// opts.SetUpsert(true)
+	_, err := pairing_collection.InsertMany(ctx, v)
+	if err != nil {
+		return errors.New("Insertion failed")
+	}
+	return nil
+}

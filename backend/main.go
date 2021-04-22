@@ -92,6 +92,24 @@ func generate_pairings(c *gin.Context) {
 		// put pairings into map
 		for i := 0; i < len(users); i += 2 {
 			pairings = append(pairings, Pairing{users[i], users[i+1]})
+			pairings = append(pairings, Pairing{users[i+1], users[i]})
+		}
+		updatePairings(pairings)
+		jsonString, _ := json.Marshal(pairings)
+		log.Println(string(jsonString))
+		c.JSON(http.StatusOK, pairings)
+	} else {
+		c.AbortWithStatus(http.StatusForbidden)
+	}
+}
+
+func getAllPairings(c *gin.Context) {
+	claims := jwt.ExtractClaims(c)
+	userID := claims[identityKey]
+	if userID == "my1@berkeley.edu" {
+		pairings, err := getPairings()
+		if err != nil {
+			c.AbortWithStatus(http.StatusInternalServerError)
 		}
 		jsonString, _ := json.Marshal(pairings)
 		log.Println(string(jsonString))
@@ -101,6 +119,16 @@ func generate_pairings(c *gin.Context) {
 	}
 }
 
+func getPairing(c *gin.Context) {
+	user, _ := c.Get(identityKey)
+	log.Println(user)
+	userID := user.(*User).Email
+	partner, err := getPartner(userID)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+	}
+	c.JSON(http.StatusOK, partner)
+}
 func getUserInfo(c *gin.Context) {
 	claims := jwt.ExtractClaims(c)
 	log.Println(claims)
@@ -174,12 +202,15 @@ func main() {
 	auth := r.Group("/auth")
 
 	auth.GET("/refresh_token", authMiddleware.RefreshHandler)
+
 	auth.Use(authMiddleware.MiddlewareFunc())
 	{
+		auth.GET("/get_partner", getPairing)
 		auth.GET("/verify_access_token", verify_token)
 		auth.GET("/verify_admin", verify_admin)
-		auth.GET("/generate_pairings", generate_pairings)
+		auth.GET("/generate_new_pairings", generate_pairings)
 		auth.GET("/get_user_info", getUserInfo)
+		auth.GET("/get_pairings", getAllPairings)
 	}
 	r.Run(":5000")
 }

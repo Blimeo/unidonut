@@ -3,6 +3,7 @@ import "./App.css";
 import "antd/dist/antd.css";
 import Home from "./Home";
 import Admin from "./Admin";
+import Connect from "./Connect";
 
 import HeaderComponent from "./components/Header/HeaderComponent";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
@@ -64,7 +65,7 @@ function App() {
               <Home loggedIn={loggedIn} />
             </Route>
             <Route path="/about">{/* <About loggedIn={loggedIn} /> */}</Route>
-            <Route path="/connect" component={Home} exact />
+            <Route path="/connect" component={Connect} exact />
             <Route path="/admin" component={Admin} exact />
           </Switch>
           <Footer style={{ textAlign: "center" }}>Unidonut ©2021</Footer>
